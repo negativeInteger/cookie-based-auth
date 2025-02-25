@@ -27,7 +27,7 @@ const users = [
     { id: '452d77d1-301f-485e-a619-d18fdaa32dad', email: "srollins@gmail.com", username: "sethrollins", password: bcrypt.hashSync("password567", 10) },
 ];
 
-// Signup Route
+// Signup Route ✅
 app.post("/signup", (req, res) => {
     const { username, email, password } = req.body;
     console.log(req.body);
