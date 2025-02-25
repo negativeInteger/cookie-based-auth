@@ -2,7 +2,7 @@ const express = require('express');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const bcrypt = require('bcryptjs');
-const { v: createId } = require('uuid');
+const { v4: createId } = require('uuid');
 require('dotenv').config();
 
 const app = express();
@@ -27,15 +27,17 @@ const users = [
     { id: '452d77d1-301f-485e-a619-d18fdaa32dad', email: "srollins@gmail.com", username: "sethrollins", password: bcrypt.hashSync("password567", 10) },
 ];
 
-// Signup Route
+// Signup Route ✅
 app.post("/signup", (req, res) => {
     const { username, email, password } = req.body;
-
+    console.log(req.body);
+    
     // check if user already exists
     let foundUser = users.find((user) => user.email === email || user.username === username);
     if (!foundUser) {
+        const userId = createId();
         let newUser = {
-            id: String(createId()),
+            id: userId,
             email,
             username,
             password: bcrypt.hashSync(password, 10)
@@ -44,7 +46,7 @@ app.post("/signup", (req, res) => {
         req.session.user = { id : newUser.id , username: newUser.username };
         return res.status(201).json({ message: "Account created successfully"});
     }
-    return res.status(409).json("username or email already exists");
+    return res.status(409).json({ message: "username or email already exists" });
 });
 // Login Route
 app.post("/login", (req, res) => {
